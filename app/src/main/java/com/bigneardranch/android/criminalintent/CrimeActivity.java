@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 public class CrimeActivity extends FragmentActivity {
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
