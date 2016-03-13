@@ -6,14 +6,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +27,16 @@ import java.util.List;
  */
 public class CrimeListFragment extends Fragment {
 
+    private static final String TAG = "CrimeListFragment";
+
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+
+    private LinearLayout mLinearLayout;
+    private Button mAddButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -43,6 +51,9 @@ public class CrimeListFragment extends Fragment {
 
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mLinearLayout = (LinearLayout) view.findViewById(R.id.empty_crime_list);
+        mAddButton = (Button) view.findViewById(R.id.add_crime_button);
 
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
@@ -121,6 +132,23 @@ public class CrimeListFragment extends Fragment {
         } else {
             mAdapter.notifyDataSetChanged();
         }
+
+        if (crimes.size() > 0){
+            mLinearLayout.setVisibility(View.GONE);
+        }else{
+            mLinearLayout.setVisibility(View.VISIBLE);
+            mAddButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+            public void onClick(View v){
+                    Log.d(TAG, "onClick");
+                    Crime crime = new Crime();
+                    CrimeLab.get(getActivity()).addCrime(crime);
+                    Intent intent = CrimePagerActivity.newInent(getActivity(), crime.getId());
+                    startActivity(intent);
+                }
+            });
+        }
+
         updateSubtitle();
     }
 
