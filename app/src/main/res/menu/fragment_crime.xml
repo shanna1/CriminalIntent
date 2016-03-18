@@ -8,4 +8,8 @@
         android:title="@string/delete_crime"
         app:showAsAction="always"/>
 
+
+
+
+
 </menu>
