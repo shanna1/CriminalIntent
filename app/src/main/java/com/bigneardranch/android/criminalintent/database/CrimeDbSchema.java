@@ -1,8 +1,10 @@
-package database;
+package com.bigneardranch.android.criminalintent.database;
 
-
+/**
+ * Created by Spencer on 3/17/2016.
+ */
 public class CrimeDbSchema {
-    public static final class CrimeTable {
+    public static final class CrimeTable{
         public static final String NAME = "crimes";
 
         public static final class Cols{
