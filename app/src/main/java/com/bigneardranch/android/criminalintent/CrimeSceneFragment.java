@@ -1,0 +1,52 @@
+package com.bigneardranch.android.criminalintent;
+
+import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.bigneardranch.android.criminalintent.database.PictureUtils;
+
+import java.io.File;
+
+/**
+ * Created by Spencer on 3/29/2016.
+ */
+public class CrimeSceneFragment extends DialogFragment {
+
+    private static final String ARG_SUSPECT_IMAGE ="suspect_image";
+
+    public static CrimeSceneFragment newInstance(File photoFile)
+    {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_SUSPECT_IMAGE, photoFile);
+
+        CrimeSceneFragment fragment = new CrimeSceneFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
+        super.onCreateDialog(savedInstanceState);
+
+        File photoFile = (File) getArguments().getSerializable(ARG_SUSPECT_IMAGE);
+
+        Bitmap image = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+
+        View v =  LayoutInflater.from(getActivity()).inflate(R.layout.dialog_suspect_image, null);
+
+        ImageView imageView = (ImageView) v.findViewById(R.id.suspect_image);
+        imageView.setImageBitmap(image);
+
+        return new AlertDialog.Builder(getActivity()).setView(imageView).create();
+
+    }
+}
+
