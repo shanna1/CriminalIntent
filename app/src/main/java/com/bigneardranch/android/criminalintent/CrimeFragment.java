@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -22,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -55,6 +57,7 @@ public class CrimeFragment extends Fragment {
     private Button mSuspectButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
+    private Point mPhotoViewSize;
 
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -179,14 +182,26 @@ public class CrimeFragment extends Fragment {
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
 
-        mPhotoButton.setOnClickListener(new View.OnClickListener(){
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
+
         mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
-        updatePhotoView();
+        mPhotoView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                boolean isFirstPass = (mPhotoViewSize == null);
+                mPhotoViewSize = new Point();
+                mPhotoViewSize.set(mPhotoView.getWidth(), mPhotoView.getHeight());
+
+                if (isFirstPass)
+                    updatePhotoView();
+            }
+        });
+
 
         return v;
     }

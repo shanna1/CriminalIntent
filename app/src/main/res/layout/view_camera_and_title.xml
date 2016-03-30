@@ -19,6 +19,8 @@
             android:background="@android:color/darker_gray"
             android:cropToPadding="true"/>
 
+
+
         <ImageButton
             android:id="@+id/crime_camera"
             android:layout_width="match_parent"
